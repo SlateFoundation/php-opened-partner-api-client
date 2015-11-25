@@ -100,7 +100,7 @@ class ApiClient
         $this->access_token = $access_token;
     }
 
-    public function request($method, $path = '/', array $params = [], array $headers = [], array $fields = [], $returnError = false)
+    public function request($method, $path = '/', $params = [], $headers = [], $fields = [], $returnError = false)
     {
         $error = null;
 
