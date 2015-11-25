@@ -313,6 +313,21 @@ class ApiClient
     }
 
 
+    public function getSubjects($params = [])
+    {
+        $valid_parameters = [ 'area' ];
+
+        $invalid_parameters = array_diff(array_keys($params), $valid_parameters);
+
+        if (count($invalid_parameters) > 0) {
+            throw new \InvalidArgumentException('Invalid parameter(s) passed: ' . implode(', ', $invalid_parameters) .
+                '; valid parameters are: ' . implode(', ', $valid_parameters));
+        }
+
+        return $this->get('/subjects.json', $params)['subjects'];
+    }
+
+
     public function getResource($id)
     {
         return $this->get("/resources/$id.json")['resource'];
