@@ -261,7 +261,7 @@ class ApiClient
 
     public function getStandardsGroups()
     {
-        return $this->get('/standard_groups.json');
+        return $this->get('/standard_groups.json')['standard_groups'];
     }
 
 
@@ -279,19 +279,19 @@ class ApiClient
                 '; valid parameters are: ' . implode(', ', $valid_parameters));
         }
 
-        return $this->get('/resources.json', $params);
+        return $this->get('/resources.json', $params)['resources'];
     }
 
 
     public function getResource($id)
     {
-        return $this->get("/resources/$id.json");
+        return $this->get("/resources/$id.json")['resource'];
     }
 
 
     public function getGradeGroups($standards_group = null)
     {
-        return $this->get('/grade_groups.json', $standards_group ? ['standards_group' => $standards_group] : []);
+        return $this->get('/grade_groups.json', $standards_group ? ['standards_group' => $standards_group] : [])['grade_groups'];
     }
 
 
