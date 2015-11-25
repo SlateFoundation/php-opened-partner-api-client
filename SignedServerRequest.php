@@ -43,7 +43,7 @@ class SignedServerRequest
 
         $envelope = array_merge($params, $envelope);
 
-        if ($this->nces_id != null && !isset($envelope['school_nces_id'])) {
+        if ($this->nces_id !== null && !array_key_exists('school_nces_id', $envelope)) {
             $envelope['school_nces_id'] = (string) $this->nces_id;
         }
 

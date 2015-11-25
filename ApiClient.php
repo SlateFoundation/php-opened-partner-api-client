@@ -42,7 +42,7 @@ class ApiClient
     {
         $curl_args = [];
 
-        if ($method != 'GET') {
+        if ($method !== 'GET') {
             $curl_args[] = '-X ' . $method;
         }
 
