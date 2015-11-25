@@ -3,6 +3,10 @@
 namespace OpenEd;
 
 
+/**
+ * Class ApiClient
+ * @package OpenEd
+ */
 class ApiClient
 {
     private $client_id;
@@ -217,9 +221,9 @@ class ApiClient
     }
 
 
-    public function delete($path = '/', $params = [], $headers = [], $fields = [], $success_code = 204)
+    public function delete($path = '/', $params = [], $headers = [], $fields = [], $success_code = 204, $return_error = false)
     {
-        list($error, $response, $response_code) = $this->request('DELETE', $path, $params, $headers, $fields);
+        list($error, $response, $response_code) = $this->request('DELETE', $path, $params, $headers, $fields, $return_error);
 
         if ($error) {
             trigger_error("[OpenEd] DELETE $path: $error", E_USER_ERROR);
@@ -259,12 +263,19 @@ class ApiClient
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getStandardsGroups()
     {
         return $this->get('/standard_groups.json')['standard_groups'];
     }
 
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function getResources($params = [])
     {
         $valid_parameters = [
@@ -283,6 +294,10 @@ class ApiClient
     }
 
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function getCategories($params = [])
     {
         $valid_parameters = [ 'standard_group', 'grade_group' ];
@@ -298,6 +313,10 @@ class ApiClient
     }
 
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function getAreas($params = [])
     {
         $valid_parameters = [ 'standard_group', 'grade_group' ];
@@ -313,6 +332,10 @@ class ApiClient
     }
 
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function getSubjects($params = [])
     {
         $valid_parameters = [ 'area' ];
@@ -328,18 +351,30 @@ class ApiClient
     }
 
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getResource($id)
     {
         return $this->get("/resources/$id.json")['resource'];
     }
 
 
+    /**
+     * @param null $standards_group
+     * @return mixed
+     */
     public function getGradeGroups($standards_group = null)
     {
         return $this->get('/grade_groups.json', $standards_group ? ['standards_group' => $standards_group] : [])['grade_groups'];
     }
 
 
+    /**
+     * @param array $ids
+     * @return mixed
+     */
     public function getClasses($ids = [])
     {
         $params = [];
@@ -352,6 +387,10 @@ class ApiClient
     }
 
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getClass($id)
     {
         return $this->get('/teachers/classes/' . $id);
@@ -364,6 +403,12 @@ class ApiClient
     }
 
 
+    /**
+     * @param $title
+     * @param null $grades_range
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function createClass($title, $grades_range = null)
     {
         $fields = [];
@@ -386,6 +431,12 @@ class ApiClient
     }
 
 
+    /**
+     * @param $class_id
+     * @param $title
+     * @param null $grades_range
+     * @throws \ErrorException
+     */
     public function updateClass($class_id, $title, $grades_range = null)
     {
         $fields = [];
@@ -415,6 +466,11 @@ class ApiClient
     }
 
 
+    /**
+     * @param $class_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function deleteClass($class_id)
     {
         if (!$class_id) {
@@ -425,6 +481,10 @@ class ApiClient
     }
 
 
+    /**
+     * @param $student
+     * @return mixed
+     */
     public function createStudent($student)
     {
         $required_fields = ['first_name', 'last_name', 'username', 'password'];
@@ -447,6 +507,12 @@ class ApiClient
     }
 
 
+    /**
+     * @param $student_id
+     * @param $student
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function updateStudent($student_id, $student)
     {
         if (!is_numeric($student_id)) {
@@ -467,6 +533,11 @@ class ApiClient
     }
 
 
+    /**
+     * @param $student_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function getStudent($student_id)
     {
         if (!is_numeric($student_id)) {
@@ -477,12 +548,20 @@ class ApiClient
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getStudents()
     {
         return $this->get('/teachers/students')['students'];
     }
 
 
+    /**
+     * @param $student_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function deleteStudent($student_id)
     {
         if (!is_numeric($student_id)) {
@@ -493,6 +572,12 @@ class ApiClient
     }
 
 
+    /**
+     * @param $student_ids
+     * @param $class_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function addStudentsToClass($student_ids, $class_id)
     {
         $fields = [];
@@ -513,12 +598,24 @@ class ApiClient
     }
 
 
+    /**
+     * @param $student_id
+     * @param $class_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function addStudentToClass($student_id, $class_id)
     {
         return $this->addStudentsToClass([$student_id], $class_id);
     }
 
 
+    /**
+     * @param $student_ids
+     * @param $class_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function removeStudentsFromClass($student_ids, $class_id)
     {
         $fields = [];
@@ -538,6 +635,12 @@ class ApiClient
         return $this->post("/teachers/classes/$class_id/remove_students", [], [], $fields);
     }
 
+    /**
+     * @param $student_id
+     * @param $class_id
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function removeStudentFromClass($student_id, $class_id)
     {
         return $this->removeStudentsFromClass([$student_id], $class_id);
