@@ -108,14 +108,15 @@ class ApiClient
     {
         $error = null;
 
-        // If the path already contains query parameters, merge them with $params if passed
-        $question_pos = strpos('?', $path);
-        if ($question_pos && count($params) > 0) {
-            $params = array_merge($params, parse_str(substr($path, $question_pos)));
-            $path = substr($path, $question_pos);
-        }
-
         $url = ((strpos($path, '/teachers') === 0) ? self::PARTNER_BASE_URL : self::BASE_URL) . $path;
+
+        $query = parse_url($url, PHP_URL_QUERY);
+        parse_str($query, $url_params);
+
+        // Parameters passed as $params are merged with parameters in the URL; $params takes precedence
+        if (count($url_params) > 0) {
+            $params = array_merge($url_params, $params);
+        }
 
         if (count($params) > 0) {
             $url .= '?' . http_build_query($params);
