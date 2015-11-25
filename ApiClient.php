@@ -283,6 +283,21 @@ class ApiClient
     }
 
 
+    public function getCategories($params = [])
+    {
+        $valid_parameters = [ 'standard_group', 'grade_group' ];
+
+        $invalid_parameters = array_diff(array_keys($params), $valid_parameters);
+
+        if (count($invalid_parameters) > 0) {
+            throw new \InvalidArgumentException('Invalid parameter(s) passed: ' . implode(', ', $invalid_parameters) .
+                '; valid parameters are: ' . implode(', ', $valid_parameters));
+        }
+
+        return $this->get('/categories.json', $params)['categories'];
+    }
+
+
     public function getResource($id)
     {
         return $this->get("/resources/$id.json")['resource'];
