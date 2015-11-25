@@ -420,10 +420,10 @@ class ApiClient
         }
 
         if ($grades_range) {
-            if ($this->validateGradeRange($grades_range)) {
+            if (static::validateGradeRange($grades_range)) {
                 $fields['grades_range'] = (string)$grades_range;
             } else {
-                throw new Error('Invalid grade range, valid formats are: 5, 5-6');
+                throw new \InvalidArgumentException('Invalid grade range, valid formats are: 5, 5-6');
             }
         }
 
@@ -446,10 +446,10 @@ class ApiClient
         }
 
         if ($grades_range) {
-            if ($this->validateGradeRange($grades_range)) {
+            if (static::validateGradeRange($grades_range)) {
                 $params['grades_range'] = $grades_range;
             } else {
-                throw new Error('Invalid grade range, valid formats are: 5, 5-6');
+                throw new \InvalidArgumentException('Invalid grade range, valid formats are: 5, 5-6');
             }
         }
 
